@@ -1,4 +1,4 @@
-GLPI ProjectBridge Plugin
+GLPI GroupCategory Plugin
 =========================
 
 By Probesys: https://probesys.com
