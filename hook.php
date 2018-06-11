@@ -281,33 +281,62 @@ function plugin_groupcategory_group_update(Group $group)
  */
 function plugin_groupcategory_post_show_ticket(Ticket $ticket)
 {
-    $user_categories = PluginGroupcategoryGroupcategory::getUserCategories();
+    global $CFG_GLPI;
+    $get_user_categories_url = rtrim($CFG_GLPI['root_doc'], '/') . '/plugins/groupcategory/ajax/get_user_categories.php';
+
     $js_block = '
-        var category_container = $("#show_category_by_type");
+        var requester_user_id_input = $("input[id^=dropdown__users_id_requester]");
 
-        if ($(".select2-choice", category_container).length) {
-            var
-                allowed_categories = ' . json_encode($user_categories) . ',
-                select2_elm = $("[id^=dropdown_itilcategories_id]", category_container),
-                previous_formatResult = select2_elm.data("select2").opts.formatResult
-            ;
+        if (requester_user_id_input.length) {
+            var requester_user_id_input = parseInt(requester_user_id_input.val());
 
-            select2_elm.data("select2").opts.formatResult = function(result, container, query, escapeMarkup) {
-                var format_result = true;
-
-                if (
-                    result.id !== undefined
-                    && result.id !== 0
-                    && allowed_categories[result.id] === undefined
-                ) {
-                    format_result = false;
+            $.ajax("' . $get_user_categories_url . '", {
+                method: "POST",
+                cache: false,
+                data: {
+                    requester_user_id: requester_user_id_input
+                },
+                complete: function(responseObj, status) {
+                    if (
+                        status == "success"
+                        && responseObj.responseText.length
+                    ) {
+                        try {
+                            var allowed_categories = $.parseJSON(responseObj.responseText);
+                            displayAllowedCategories(allowed_categories);
+                        } catch (e) {
+                        }
+                    }
                 }
-
-                if (format_result) {
-                    return previous_formatResult(result, container, query, escapeMarkup);
-                }
-            };
+            });
         }
+
+        function displayAllowedCategories(allowed_categories) {
+            var category_container = $("#show_category_by_type");
+
+            if ($(".select2-choice", category_container).length) {
+                var
+                    select2_elm = $("[id^=dropdown_itilcategories_id]", category_container),
+                    previous_formatResult = select2_elm.data("select2").opts.formatResult
+                ;
+
+                select2_elm.data("select2").opts.formatResult = function(result, container, query, escapeMarkup) {
+                    var format_result = true;
+
+                    if (
+                        result.id !== undefined
+                        && result.id !== 0
+                        && allowed_categories[result.id] === undefined
+                    ) {
+                        format_result = false;
+                    }
+
+                    if (format_result) {
+                        return previous_formatResult(result, container, query, escapeMarkup);
+                    }
+                };
+            }
+        };
     ';
 
     echo Html::scriptBlock($js_block);

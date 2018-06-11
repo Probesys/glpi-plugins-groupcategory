@@ -55,19 +55,24 @@ class PluginGroupcategoryGroupcategory extends CommonDBTM
     }
 
     /**
-     * Get the categories for the current user
+     * Get the categories for a user
      *
+     * @param int $user_id
      * @return array
      */
-    public static function getUserCategories()
+    public static function getUserCategories($user_id)
     {
         $user_categories = [];
 
-        if (!empty($_SESSION['glpigroups'])) {
-            foreach ($_SESSION['glpigroups'] as $group_id) {
+        $user = new User();
+
+        if ($user->getFromDB($user_id)) {
+            $user_groups = Group_User::getUserGroups($user_id);
+
+            foreach ($user_groups as $group_data) {
                 $group = new Group();
 
-                if ($group->getFromDB($group_id)) {
+                if ($group->getFromDB($group_data['id'])) {
                     $categories = PluginGroupcategoryGroupcategory::getSelectedCategoriesForGroup($group);
                     $user_categories += $categories;
                 }

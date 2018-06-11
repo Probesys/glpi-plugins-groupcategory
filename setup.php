@@ -12,7 +12,7 @@ function plugin_version_groupcategory()
 {
     return [
         'name' => 'GroupCategory',
-        'version' => '1.0',
+        'version' => '1.1',
         'author' => 'Pierre de Vésian - <a href="http://www.probesys.com">Probesys</a>',
         'homepage' => 'https://probesys.com/',
         'license' => 'GPLv2+',
