@@ -6,9 +6,29 @@
     <logo></logo>
     <description>
         <short>
+            <cs>Skupina kategorie: omezuje počet kategorií dostupných žadatelům při vytváření požadavků</cs>
+            <en>GroupCategory: limits number of categories accessible to requester on ticket creation</en>
             <fr>GroupCategory : limite le nombre de catégories disponibles pour les demandeurs lors de la création de tickets</fr>
         </short>
         <long>
+    <cs>
+    Skupina kategorie je zásuvný modul umožňující omezit při vytváření požadavku uživateli počet dostupných kategorií.
+
+    Funkce
+    ======
+
+    - nastavení seznamu znepřístupněných/zpřístupněných kategorií pro každou ze skupin
+    - změna zpřístupněných kategori podle nastavení a skupin žadatele při vytváření požadavku
+    </cs>
+    <en>
+    GroupCategory is a plugin that allows you to limit the number of categories available to requesters when creating tickets.
+
+    Functions
+    =========
+
+    - configuration of a list of prohibited / authorized categories for each group
+    - change of available categories according to the configuration and the groups of the requester during the creation of a ticket
+    </en>
     <fr>
     GroupCategory est un plugin qui vous permet de limiter le nombre de catégories disponibles pour les demandeurs lors de la création de tickets.
 
@@ -40,6 +60,16 @@
     </langs>
     <license>AGPL-3.0</license>
     <tags>
+        <cs>
+            <tag>Skupiny</tag>
+            <tag>Požadavky</tag>
+            <tag>Kategorie</tag>
+        </cs>
+        <en>
+            <tag>Groups</tag>
+            <tag>Tickets</tag>
+            <tag>Categories</tag>
+        </en>
         <fr>
             <tag>Groupes</tag>
             <tag>Tickets</tag>
