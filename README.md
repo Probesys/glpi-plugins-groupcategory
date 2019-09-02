@@ -1,11 +1,11 @@
-GLPI ProjectBridge Plugin
+GLPI groupCategory Plugin
 =========================
 
 By Probesys: https://probesys.com
 
 Language: french
 
-Works with: GLPI 9.2.1 and 9.2.3 (9.2.2 untested)
+Works with: GLPI 9.4.X ( tested with 9.4.3 )
 
 This plugin customizes the list of accessible ticket categories for ticket requesters.
 

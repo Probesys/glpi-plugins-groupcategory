@@ -68,7 +68,6 @@ class PluginGroupcategoryGroupcategory extends CommonDBTM
 
          foreach ($user_groups as $group_data) {
             $group = new Group();
-
             if ($group->getFromDB($group_data['id'])) {
                 $categories = PluginGroupcategoryGroupcategory::getSelectedCategoriesForGroup($group);
                 $user_categories += $categories;

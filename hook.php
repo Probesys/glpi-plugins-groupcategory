@@ -256,8 +256,7 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket) {
     $get_user_categories_url = rtrim($CFG_GLPI['root_doc'], '/') . '/plugins/groupcategory/ajax/get_user_categories.php';
 
     $js_block = '
-        var requester_user_id_input = $("input[id^=dropdown__users_id_requester]");
-
+        var requester_user_id_input = $("select[id^=dropdown__users_id_requester]");        
         if (requester_user_id_input.length) {
             var requester_user_id_input = parseInt(requester_user_id_input.val());
 
@@ -284,29 +283,11 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket) {
 
         function displayAllowedCategories(allowed_categories) {
             var category_container = $("#show_category_by_type");
-
-            if ($(".select2-choice", category_container).length) {
-                var
-                    select2_elm = $("[id^=dropdown_itilcategories_id]", category_container),
-                    previous_formatResult = select2_elm.data("select2").opts.formatResult
-                ;
-
-                select2_elm.data("select2").opts.formatResult = function(result, container, query, escapeMarkup) {
-                    var format_result = true;
-
-                    if (
-                        result.id !== undefined
-                        && result.id !== 0
-                        && allowed_categories[result.id] === undefined
-                    ) {
-                        format_result = false;
-                    }
-
-                    if (format_result) {
-                        return previous_formatResult(result, container, query, escapeMarkup);
-                    }
-                };
-            }
+            idSelectItil = $("select[name=itilcategories_id]").attr(\'id\');
+            $("#"+idSelectItil).empty().select2({
+                data: allowed_categories,                
+            });
+            
         };
     ';
 
