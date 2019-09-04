@@ -6,6 +6,7 @@
       <short>
 	      <fr>Permet de limiter le nombre de catégories disponibles pour les demandeurs lors de la création de tickets.</fr>
 	      <en>Customizes the list of accessible ticket categories for ticket requesters.</en>
+          <cs>Skupina kategorie je zásuvný modul umožňující omezit při vytváření požadavku uživateli počet dostupných kategorií.</cs>
       </short>
       <long>
          <fr>
@@ -18,6 +19,10 @@
 * change the list of available categories on the ticket creation form. Example: If the requester of a ticket is in group XYZ, the categories will include ABC. If the requester is in group UVW, category ABC won't be available.
 * if a group's allowed categories list is empty, requesters in this group will have access to nearly all categories (depending on entities and if the categories are recursive)
          </en>
+         <cs>
+* nastavení seznamu znepřístupněných/zpřístupněných kategorií pro každou ze skupin
+* změna zpřístupněných kategori podle nastavení a skupin žadatele při vytváření požadavku
+         </cs>
       </long>
    </description>
    <homepage>https://github.com/Probesys/glpi-plugins-groupcategory</homepage>
