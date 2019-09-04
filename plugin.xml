@@ -51,14 +51,19 @@
    <license>AGPL v3+</license>
    <tags>
       <fr>
-         <tag>tickets</tag>
-         <tag>groupes</tag>
-         <tag>catégories</tag>
+         <tag>Tickets</tag>
+         <tag>Groupes</tag>
+         <tag>Catégories</tag>
       </fr>
       <en>
-         <tag>tickets</tag>
-         <tag>groups</tag>
-         <tag>categories</tag>
+         <tag>Tickets</tag>
+         <tag>Groups</tag>
+         <tag>Categories</tag>
       </en>
+      <cs>
+         <tag>Skupiny</tag>
+         <tag>Požadavky</tag>
+         <tag>kategorie</tag>
+      </cs>
    </tags>
 </root>
