@@ -7,13 +7,23 @@ Html::header_nocache();
 
 Session::checkLoginUser();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST'
-    && !empty($_POST['requester_user_id'])
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['requester_user_id'])
 ) {
     $requester_user_id = (int) trim($_POST['requester_user_id']);
     $user_categories = PluginGroupcategoryGroupcategory::getUserCategories($requester_user_id);
 
-   if (!empty($user_categories)) {
-       echo json_encode($user_categories);
-   }
+    $results = [];
+    foreach ($user_categories as $key => $categorie) {
+        $results[] = [
+          'id' => $key,
+          'text' => $categorie
+        ];
+    }
+    if(count($results)){
+        echo json_encode($results);
+    }
+
+    /* if (!empty($user_categories)) {
+      echo json_encode($user_categories);
+      } */
 }
