@@ -11,8 +11,8 @@ define('PLUGIN_GROUPCATEGORY_NAMESPACE', 'groupcategory');
 function plugin_version_groupcategory() {
     return [
       'name' => 'GroupCategory',
-      'version' => '1.2',
-      'author' => 'Pierre de Vésian, Philippe GODOT - <a href="http://www.probesys.com">Probesys</a>',
+      'version' => '1.2.1',
+      'author' => 'Pierre de Vésian, Philippe GODOT - <a href="http://www.probesys.com">PROBESYS</a>',
       'homepage' => 'https://probesys.com/',
       'license' => 'GPLv2+',
       'minGlpiVersion' => PLUGIN_GROUPCATEGORY_MIN_GLPI_VERSION,
