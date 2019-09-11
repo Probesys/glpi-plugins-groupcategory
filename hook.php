@@ -254,23 +254,35 @@ function plugin_groupcategory_group_update(Group $group) {
 function plugin_groupcategory_post_show_ticket(Ticket $ticket) {
     global $CFG_GLPI;
     $get_user_categories_url = rtrim($CFG_GLPI['root_doc'], '/') . '/plugins/groupcategory/ajax/get_user_categories.php';
-
+    
     $js_block = '
-        var requester_user_id_input = $("select[id^=dropdown__users_id_requester]");        
-        if (requester_user_id_input.length) {
-            var requester_user_id_input = parseInt(requester_user_id_input.val());
-
+        //console.log("plugin_groupcategory_post_show_ticket");
+        var requester_user_id = 0;
+        ';
+    
+    if ($_SESSION["glpiactiveprofile"]["interface"] == "helpdesk") {
+        $user_id = $_SESSION['glpiID'];
+        $js_block .= 'var requester_user_id = '.$user_id.';';
+    }else{
+        $js_block .= '
+            var requester_user_id_input = $("select[id^=dropdown__users_id_requester]");
+            if (requester_user_id_input.length) {
+                var requester_user_id = parseInt(requester_user_id_input.val());
+            }
+            ';
+    }
+    
+    $js_block .= '        
+        if (requester_user_id) {            
             $.ajax("' . $get_user_categories_url . '", {
                 method: "POST",
                 cache: false,
                 data: {
-                    requester_user_id: requester_user_id_input
+                    requester_user_id: requester_user_id
                 },
                 complete: function(responseObj, status) {
-                    if (
-                        status == "success"
-                        && responseObj.responseText.length
-                    ) {
+                    if ( status == "success"  && responseObj.responseText.length) 
+                    {
                         try {
                             var allowed_categories = $.parseJSON(responseObj.responseText);
                             displayAllowedCategories(allowed_categories);
@@ -282,6 +294,7 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket) {
         }
 
         function displayAllowedCategories(allowed_categories) {
+            
             var category_container = $("#show_category_by_type");
             idSelectItil = $("select[name=itilcategories_id]").attr(\'id\');
             $("#"+idSelectItil).empty().select2({
