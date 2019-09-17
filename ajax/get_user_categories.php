@@ -23,7 +23,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['requester_user_id'])
         echo json_encode($results);
     }
 
-    /* if (!empty($user_categories)) {
-      echo json_encode($user_categories);
-      } */
 }

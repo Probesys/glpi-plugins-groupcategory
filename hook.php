@@ -263,11 +263,10 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket) {
         //console.log("plugin_groupcategory_post_show_ticket");
         var requester_user_id = 0;
         ';
-
-    if ($_SESSION["glpiactiveprofile"]["interface"] == "helpdesk") {
-        $user_id = $_SESSION['glpiID'];
-        $js_block .= 'var requester_user_id = ' . $user_id . ';';
-    } else {
+    $user_id = $_SESSION['glpiID'];
+    $js_block .= 'var requester_user_id = ' . $user_id . ';';
+    if ($_SESSION["glpiactiveprofile"]["interface"] == "central") {
+            
         $js_block .= '
             var requester_user_id_input = $("select[id^=dropdown__users_id_requester]");
             if (requester_user_id_input.length) {
@@ -275,7 +274,7 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket) {
             }
             ';
     }
-
+    //$js_block .= 'console.log(requester_user_id);';        
     $js_block .= '        
         if (requester_user_id) {            
             $.ajax("' . $get_user_categories_url . '", {
