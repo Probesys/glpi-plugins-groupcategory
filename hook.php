@@ -8,8 +8,8 @@
 function plugin_groupcategory_install() {
     global $DB;
 
-   if (!$DB->tableExists(getTableForItemType('PluginGroupcategoryGroupcategory'))) {
-       $create_table_query = "
+    if (!$DB->tableExists(getTableForItemType('PluginGroupcategoryGroupcategory'))) {
+        $create_table_query = "
             CREATE TABLE IF NOT EXISTS `" . getTableForItemType('PluginGroupcategoryGroupcategory') . "`
             (
                 `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -21,8 +21,8 @@ function plugin_groupcategory_install() {
             COLLATE='utf8_unicode_ci'
             ENGINE=MyISAM
         ";
-       $DB->query($create_table_query) or die($DB->error());
-   }
+        $DB->query($create_table_query) or die($DB->error());
+    }
 
     return true;
 }
@@ -36,7 +36,7 @@ function plugin_groupcategory_uninstall() {
     global $DB;
 
     $tables_to_drop = [
-        getTableForItemType('PluginGroupcategoryGroupcategory'),
+      getTableForItemType('PluginGroupcategoryGroupcategory'),
     ];
 
     $drop_table_query = "DROP TABLE IF EXISTS `" . implode('`, `', $tables_to_drop) . "`";
@@ -51,82 +51,86 @@ function plugin_groupcategory_uninstall() {
  */
 function plugin_groupcategory_post_show_group(Group $group) {
 
-   if ($group->getId() > 0) {
+    if ($group->getId() > 0) {
 
-       $categories = PluginGroupcategoryGroupcategory::getAllCategories();
-       $selected_categories = PluginGroupcategoryGroupcategory::getSelectedCategoriesForGroup($group);
+        $categories = PluginGroupcategoryGroupcategory::getAllCategories();
+        $selected_categories = PluginGroupcategoryGroupcategory::getSelectedCategoriesForGroup($group);
+        $dom = '';
+        $dom .= '<div id="groupcategory_content">';
+        $dom .= '<table class="tab_cadre_fixe" >' . "\n";
+        $dom .= '<tbody>' . "\n";
 
-       echo '<table>' . "\n";
-       echo '<tbody id="groupcategory_content">' . "\n";
+        if (true) {
+            $dom .= '<tr class="tab_bg_1">' . "\n";
 
-      if (true) {
-          echo '<tr class="tab_bg_1">' . "\n";
+            $dom .= '<th colspan="2" class="subheader">';
+            $dom .= 'Catégories refusées';
+            $dom .= '</th>' . "\n";
 
-          echo '<th colspan="2" class="subheader">';
-          echo 'Catégories refusées';
-          echo '</th>' . "\n";
+            $dom .= '<th colspan="2" class="subheader">';
+            $dom .= 'Catégories autorisées';
+            $dom .= '</th>' . "\n";
 
-          echo '<th colspan="2" class="subheader">';
-          echo 'Catégories autorisées';
-          echo '</th>' . "\n";
+            $dom .= '</tr>' . "\n";
+        }
 
-          echo '</tr>' . "\n";
-      }
+        if (true) {
+            $dom .= '<tr class="tab_bg_1">' . "\n";
 
-      if (true) {
-         echo '<tr class="tab_bg_1">' . "\n";
+            if (true) {
+                $dom .= '<td colspan="2">' . "\n";
 
-         if (true) {
-             echo '<td colspan="2">' . "\n";
+                $dom .= '<input type="hidden" name="groupcategory_allowed_categories" id="groupcategory_allowed_categories_ids" value="' . implode(', ', array_keys($selected_categories)) . '" />';
 
-             echo '<input type="hidden" name="groupcategory_allowed_categories" id="groupcategory_allowed_categories_ids" value="' . implode(', ', array_keys($selected_categories)) . '" />';
+                $dom .= '<div>';
+                $dom .= '<input type="button" class="submit" id="groupcategory_allow_categories" value="Autoriser >" style="padding: 10px" />';
+                $dom .= '</div>' . "\n";
 
-             echo '<div>';
-             echo '<input type="button" class="submit" id="groupcategory_allow_categories" value="Autoriser >" style="padding: 10px" />';
-             echo '</div>' . "\n";
+                $dom .= '<select id="groupcategory_denied_categories" style="min-width: 150px; height: 150px; margin-top: 15px;" multiple>' . "\n";
 
-             echo '<select id="groupcategory_denied_categories" style="min-width: 150px; height: 150px; margin-top: 15px;" multiple>' . "\n";
+                foreach ($categories as $details) {
+                    if (!isset($selected_categories[$details['id']])) {
+                        $dom .= '<option value="' . $details['id'] . '">';
+                        $dom .= $details['completename'];
+                        $dom .= '</option>' . "\n";
+                    }
+                }
 
-            foreach ($categories as $details) {
-               if (!isset($selected_categories[$details['id']])) {
-                     echo '<option value="' . $details['id'] . '">';
-                     echo $details['completename'];
-                     echo '</option>' . "\n";
-               }
+                $dom .= '</select>' . "\n";
+
+                $dom .= '</td>' . "\n";
             }
 
-             echo '</select>' . "\n";
+            if (true) {
+                $dom .= '<td colspan="2">' . "\n";
 
-             echo '</td>' . "\n";
-         }
+                $dom .= '<div>';
+                $dom .= '<input type="button" class="submit" id="groupcategory_deny_categories" value="< Refuser" style="padding: 10px" />';
+                $dom .= '</div>' . "\n";
 
-         if (true) {
-             echo '<td colspan="2">' . "\n";
+                $dom .= '<select id="groupcategory_allowed_categories" style="min-width: 150px; height: 150px; margin-top: 15px;" multiple>' . "\n";
 
-             echo '<div>';
-             echo '<input type="button" class="submit" id="groupcategory_deny_categories" value="< Refuser" style="padding: 10px" />';
-             echo '</div>' . "\n";
+                foreach ($selected_categories as $category_id => $completename) {
+                    $dom .= '<option value="' . $category_id . '">';
+                    $dom .= $completename;
+                    $dom .= '</option>' . "\n";
+                }
 
-             echo '<select id="groupcategory_allowed_categories" style="min-width: 150px; height: 150px; margin-top: 15px;" multiple>' . "\n";
+                $dom .= '</select>' . "\n";
 
-            foreach ($selected_categories as $category_id => $completename) {
-                echo '<option value="' . $category_id . '">';
-                echo $completename;
-                echo '</option>' . "\n";
+                $dom .= '</td>' . "\n";
             }
+        }
 
-             echo '</select>' . "\n";
+        $dom .= '</tbody>' . "\n";
+        $dom .= '</table>' . "\n";
+        $dom .= '</div>' . "\n";
 
-             echo '</td>' . "\n";
-         }
-      }
+        echo $dom;
 
-         echo '</tbody>' . "\n";
-         echo '</table>' . "\n";
-
-         $js_block = '
+        $js_block = '
             var _groupcategory_content = $("#groupcategory_content");
-            $(_groupcategory_content.html()).detach().insertBefore("#mainformtable .footerRow");
+            $(_groupcategory_content.html()).detach().insertAfter("table#mainformtable");
             _groupcategory_content.remove();
 
             var _groupcategory_selected_categories = {
@@ -210,8 +214,8 @@ function plugin_groupcategory_post_show_group(Group $group) {
             });
         ';
 
-         echo Html::scriptBlock($js_block);
-   }
+        echo Html::scriptBlock($js_block);
+    }
 }
 
 /**
@@ -221,29 +225,29 @@ function plugin_groupcategory_post_show_group(Group $group) {
  */
 function plugin_groupcategory_group_update(Group $group) {
 
-   if (isset($group->input['groupcategory_allowed_categories'])) {
-       $allowed_categories_ids = trim($group->input['groupcategory_allowed_categories']);
+    if (isset($group->input['groupcategory_allowed_categories'])) {
+        $allowed_categories_ids = trim($group->input['groupcategory_allowed_categories']);
 
-       $selected_categories = PluginGroupcategoryGroupcategory::getSelectedCategoriesForGroup($group);
-       $selected_categories_ids = implode(', ', array_keys($selected_categories));
+        $selected_categories = PluginGroupcategoryGroupcategory::getSelectedCategoriesForGroup($group);
+        $selected_categories_ids = implode(', ', array_keys($selected_categories));
 
-      if ($allowed_categories_ids != $selected_categories_ids) {
-          $group_category = new PluginGroupcategoryGroupcategory();
-          //$exists = $group_category->getFromDBByQuery("WHERE TRUE AND group_id = " . $group->getId());
-          $exists = $group_category->getFromDBByCrit(["group_id" =>  $group->getId()]);
-          $group_update_params = [
+        if ($allowed_categories_ids != $selected_categories_ids) {
+            $group_category = new PluginGroupcategoryGroupcategory();
+            //$exists = $group_category->getFromDBByQuery("WHERE TRUE AND group_id = " . $group->getId());
+            $exists = $group_category->getFromDBByCrit(["group_id" => $group->getId()]);
+            $group_update_params = [
               'group_id' => $group->getId(),
               'category_ids' => $allowed_categories_ids,
-          ];
+            ];
 
-          if ($exists) {
-              $group_update_params['id'] = $group_category->getId();
-              $group_category->update($group_update_params, [], false);
+            if ($exists) {
+                $group_update_params['id'] = $group_category->getId();
+                $group_category->update($group_update_params, [], false);
             } else {
                 $group_category->add($group_update_params, [], false);
             }
-      }
-   }
+        }
+    }
 }
 
 /**
@@ -254,16 +258,16 @@ function plugin_groupcategory_group_update(Group $group) {
 function plugin_groupcategory_post_show_ticket(Ticket $ticket) {
     global $CFG_GLPI;
     $get_user_categories_url = rtrim($CFG_GLPI['root_doc'], '/') . '/plugins/groupcategory/ajax/get_user_categories.php';
-    
+
     $js_block = '
         //console.log("plugin_groupcategory_post_show_ticket");
         var requester_user_id = 0;
         ';
-    
+
     if ($_SESSION["glpiactiveprofile"]["interface"] == "helpdesk") {
         $user_id = $_SESSION['glpiID'];
-        $js_block .= 'var requester_user_id = '.$user_id.';';
-    }else{
+        $js_block .= 'var requester_user_id = ' . $user_id . ';';
+    } else {
         $js_block .= '
             var requester_user_id_input = $("select[id^=dropdown__users_id_requester]");
             if (requester_user_id_input.length) {
@@ -271,7 +275,7 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket) {
             }
             ';
     }
-    
+
     $js_block .= '        
         if (requester_user_id) {            
             $.ajax("' . $get_user_categories_url . '", {
