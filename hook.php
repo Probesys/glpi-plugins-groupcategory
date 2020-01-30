@@ -19,7 +19,7 @@ function plugin_groupcategory_install() {
                 INDEX (`group_id`)
             )
             COLLATE='utf8_unicode_ci'
-            ENGINE=MyISAM
+            ENGINE=InnoDB
         ";
         $DB->query($create_table_query) or die($DB->error());
     }
