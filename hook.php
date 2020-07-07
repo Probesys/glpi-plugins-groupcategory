@@ -233,7 +233,6 @@ function plugin_groupcategory_group_update(Group $group) {
 
         if ($allowed_categories_ids != $selected_categories_ids) {
             $group_category = new PluginGroupcategoryGroupcategory();
-            //$exists = $group_category->getFromDBByQuery("WHERE TRUE AND group_id = " . $group->getId());
             $exists = $group_category->getFromDBByCrit(["group_id" => $group->getId()]);
             $group_update_params = [
               'group_id' => $group->getId(),
@@ -260,11 +259,23 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket) {
     $get_user_categories_url = rtrim($CFG_GLPI['root_doc'], '/') . '/plugins/groupcategory/ajax/get_user_categories.php';
 
     $js_block = '
-        //console.log("plugin_groupcategory_post_show_ticket");
         var requester_user_id = 0;
         ';
     $user_id = $_SESSION['glpiID'];
+	$select_ids = $_SESSION['select_ids'];
+	$select_ids_isnull = false;
+	
+	if ($select_ids == null || $select_ids == 2)
+	{
+		$_SESSION['select_ids'] = 1;
+	}
+	else
+	{
+		$_SESSION['select_ids'] = 2;
+	}
+	
     $js_block .= 'var requester_user_id = ' . $user_id . ';';
+	$js_block .= 'var requester_select_ids = ' . $select_ids . ';';
     if ($_SESSION["glpiactiveprofile"]["interface"] == "central") {
             
         $js_block .= '
@@ -274,9 +285,10 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket) {
             }
             ';
     }
-    //$js_block .= 'console.log(requester_user_id);';        
+
     $js_block .= '        
-        if (requester_user_id) {            
+        selectUtil = $("select[name=itilcategories_id]");
+		if (requester_user_id) {            
             $.ajax("' . $get_user_categories_url . '", {
                 method: "POST",
                 cache: false,
@@ -287,23 +299,57 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket) {
                     if ( status == "success"  && responseObj.responseText.length) 
                     {
                         try {
+							console.log("POST show catagories: " + requester_select_ids);
                             var allowed_categories = $.parseJSON(responseObj.responseText);
-                            displayAllowedCategories(allowed_categories);
+							displayAllowedCategories(allowed_categories, requester_select_ids);
                         } catch (e) {
                         }
                     }
                 }
             });
         }
-
-        function displayAllowedCategories(allowed_categories) {
-            
+		selectUtil.on("change", function(e) {
+			sessionStorage.setItem("categorySelectedIndex", selectUtil[0].selectedIndex);
+        });
+		
+        function displayAllowedCategories(allowed_categories, requester_select_ids) {
+			
             var category_container = $("#show_category_by_type");
-            idSelectItil = $("select[name=itilcategories_id]").attr(\'id\');
-            $("#"+idSelectItil).empty().select2({
-                data: allowed_categories,                
-            });
-            
+            idSelectItil = selectUtil.attr(\'id\');
+			
+			console.log(selectUtil);
+			var selectedIndexValue = sessionStorage.getItem("categorySelectedIndex");
+			if (selectedIndexValue == undefined)
+			{
+			    selectedIndexValue = 0;
+			}
+			$("#"+idSelectItil).val(selectedIndexValue).select2({
+				data: allowed_categories,                
+			});
+			
+			selectedIndexValue = sessionStorage.getItem("categorySelectedIndex");
+			if (selectedIndexValue == undefined)
+			{
+				selectedIndexValue = 0;
+			}
+			
+			console.log("SELECTEDINDEXVALUE: " + selectedIndexValue);
+			console.log("SELECTEDINDEX: " + selectUtil[0].selectedIndex);
+				selectUtil[0].selectedIndex = selectedIndexValue;
+				var index_option;
+				for (index_option in selectUtil[0].options) 
+				{
+					if (index_option == "0")
+					{
+						selectUtil[0].options[index_option].selected = true;	
+					}
+					else
+					{
+						selectUtil[0].options[index_option].selected = false;
+					}
+				}
+				console.log(selectUtil);
+				selectUtil.attr(\'title\', allowed_categories[selectedIndexValue].text);
         };
     ';
 
