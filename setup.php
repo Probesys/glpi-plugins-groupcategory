@@ -1,7 +1,10 @@
 <?php
-
-define('PLUGIN_GROUPCATEGORY_MIN_GLPI_VERSION', '9.4');
+// Version of the plugin
+define('PLUGIN_GROUPCATEGORY_VERSION', "1.3.0");
+define('PLUGIN_GROUPCATEGORY_GLPI_MIN_VERSION', '9.4');
 define('PLUGIN_GROUPCATEGORY_NAMESPACE', 'groupcategory');
+// Maximum GLPI version, exclusive
+define("PLUGIN_GROUPCATEGORY_GLPI_MAX_VERSION", "9.6");
 
 /**
  * Plugin description
@@ -11,11 +14,11 @@ define('PLUGIN_GROUPCATEGORY_NAMESPACE', 'groupcategory');
 function plugin_version_groupcategory() {
     return [
       'name' => 'GroupCategory',
-      'version' => '1.2.4',
-      'author' => 'Pierre de Vésian, Philippe GODOT - <a href="http://www.probesys.com">PROBESYS</a>',
-      'homepage' => 'https://probesys.com/',
+      'version' => PLUGIN_GROUPCATEGORY_VERSION,
+      'author' => '<a href="https://www.probesys.com">PROBESYS</a>',
+      'homepage' => 'https://github.com/Probesys/glpi-plugins-groupcategory',
       'license' => 'GPLv2+',
-      'minGlpiVersion' => PLUGIN_GROUPCATEGORY_MIN_GLPI_VERSION,
+      'minGlpiVersion' => PLUGIN_GROUPCATEGORY_GLPI_MIN_VERSION,
     ];
 }
 
@@ -38,24 +41,16 @@ function plugin_init_groupcategory() {
 }
 
 /**
- * Check if plugin prerequisites are met
- *
- * @return boolean
+ * Check plugin's prerequisites before installation
  */
-function plugin_groupcategory_check_prerequisites() {
-    $prerequisites_check_ok = false;
-
-    try {
-        if (version_compare(GLPI_VERSION, PLUGIN_GROUPCATEGORY_MIN_GLPI_VERSION, '<')) {
-            throw new Exception('This plugin requires GLPI >= ' . PLUGIN_GROUPCATEGORY_MIN_GLPI_VERSION);
-        }
-
-        $prerequisites_check_ok = true;
-    } catch (Exception $e) {
-        echo $e->getMessage();
+function plugin_groupcategory_check_prerequisites()
+{
+    if (version_compare(GLPI_VERSION, PLUGIN_GROUPCATEGORY_GLPI_MIN_VERSION, 'lt') || version_compare(GLPI_VERSION, PLUGIN_GROUPCATEGORY_GLPI_MAX_VERSION, 'ge')) {
+        echo __('This plugin requires GLPI >= ' . PLUGIN_GROUPCATEGORY_GLPI_MIN_VERSION . ' and GLPI < ' . PLUGIN_GROUPCATEGORY_GLPI_MAX_VERSION . '<br>');
+    } else {
+        return true;
     }
-
-    return $prerequisites_check_ok;
+    return false;
 }
 
 /**

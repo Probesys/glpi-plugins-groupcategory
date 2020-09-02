@@ -16,9 +16,9 @@ class PluginGroupcategoryGroupcategory extends CommonDBTM {
     public static function getAllCategories() {
         if (empty(PluginGroupcategoryGroupcategory::$_all_categories)) {
             $category = new ITILCategory();
-            $categories = $category->find("TRUE", "completename ASC, level ASC, id ASC");
+            $categories = $category->find([],"completename ASC, level ASC, id ASC");
 
-            PluginGroupcategoryGroupcategory::$_all_categories = $categories;
+            self::$_all_categories = $categories;
         }
 
         return PluginGroupcategoryGroupcategory::$_all_categories;
@@ -35,10 +35,8 @@ class PluginGroupcategoryGroupcategory extends CommonDBTM {
 
         if ($group_category->getFromDBByCrit(["group_id" => $group->getId()])) {
             $category_ids = explode(', ', $group_category->fields['category_ids']);
-
-            $all_categories = PluginGroupcategoryGroupcategory::getAllCategories();
+            $all_categories = self::getAllCategories();
             $selected_categories = [];
-
             foreach ($all_categories as $details) {
                 if (in_array($details['id'], $category_ids)) {
                     $selected_categories[$details['id']] = $details['completename'];
@@ -68,7 +66,7 @@ class PluginGroupcategoryGroupcategory extends CommonDBTM {
             foreach ($user_groups as $group_data) {
                 $group = new Group();
                 if ($group->getFromDB($group_data['id'])) {
-                    $categories = PluginGroupcategoryGroupcategory::getSelectedCategoriesForGroup($group);
+                    $categories = self::getSelectedCategoriesForGroup($group);
                     $user_categories += $categories;
                 }
             }
