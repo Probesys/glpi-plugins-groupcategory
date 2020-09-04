@@ -6,6 +6,14 @@ define('PLUGIN_GROUPCATEGORY_NAMESPACE', 'groupcategory');
 // Maximum GLPI version, exclusive
 define("PLUGIN_GROUPCATEGORY_GLPI_MAX_VERSION", "9.6");
 
+if (!defined("PLUGIN_GROUPCATEGORY_DIR")) {
+   define("PLUGIN_GROUPCATEGORY_DIR", Plugin::getPhpDir("groupcategory"));
+}
+if (!defined("PLUGIN_GROUPCATEGORY_WEB_DIR")) {
+   define("PLUGIN_GROUPCATEGORY_WEB_DIR", Plugin::getWebDir("groupcategory"));
+}
+
+
 /**
  * Plugin description
  *

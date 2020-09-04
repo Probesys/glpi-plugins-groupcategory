@@ -234,7 +234,7 @@ function plugin_groupcategory_group_update(Group $group) {
  */
 function plugin_groupcategory_post_show_ticket(Ticket $ticket) {
     global $CFG_GLPI;
-    $get_user_categories_url = rtrim($CFG_GLPI['root_doc'], '/') . '/plugins/groupcategory/ajax/get_user_categories.php';
+    $get_user_categories_url = PLUGIN_GROUPCATEGORY_WEB_DIR. '/ajax/get_user_categories.php';
 
     $js_block = '
         //console.log("plugin_groupcategory_post_show_ticket");
