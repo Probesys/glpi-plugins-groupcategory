@@ -253,16 +253,25 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket)
             }
             ';
     }
+    $selectedItilcategoriesId = '';
+    if (isset($_POST['itilcategories_id'])) {
+        $selectedItilcategoriesId = $_POST['itilcategories_id'];
+    }
 
     //$js_block .= 'console.log(requester_user_id);';
-    $js_block .= '        
-        if (requester_user_id) {            
+    $js_block .= ' 
+        if (requester_user_id) { 
+            loadAllowedCategories('.$selectedItilcategoriesId.');
+        }
+        function loadAllowedCategories(selectedItilcategoriesId) {
+                       
             $.ajax("' . $get_user_categories_url . '", {
                 method: "POST",
                 cache: false,
                 data: {
                     requester_user_id: requester_user_id,
-                    _glpi_csrf_token: glpi_csrf_token 
+                    _glpi_csrf_token: glpi_csrf_token,
+                    selectedItilcategoriesId : selectedItilcategoriesId
                 },
                 complete: function(responseObj, status) {
                     if ( status == "success"  && responseObj.responseText.length) 
@@ -275,18 +284,32 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket)
                     }
                 }
             });
-        }
-
-        function displayAllowedCategories(allowed_categories) {
-            console.log("groupCategroryPlugin : in displayAllowedCategories function");
-            var category_container = $("#show_category_by_type");
-            idSelectItil = $("select[name=itilcategories_id]").attr(\'id\');
-            $("#"+idSelectItil).empty().select2({
-                data: allowed_categories,
-                width: "auto"
-            });
             
         };
+
+        function displayAllowedCategories(allowed_categories) {
+
+            var category_container = $("#show_category_by_type");
+            domElementItilcategorieselement = $("select[name=itilcategories_id]");
+            idSelectItil = $("select[name=itilcategories_id]").attr(\'id\');
+            //idSelectItil = oldIdSelectItil;
+            //surcharge id : 
+            //idSelectItil = oldIdSelectItil + "_override-new";
+            //domElementItilcategorieselement.attr(\'id\',idSelectItil);
+            
+            $("#"+idSelectItil).empty().select2({
+                data: allowed_categories,
+                width: "",
+            });
+    
+            $("#"+idSelectItil).select2("open");
+        };
+        
+        $( document ).ajaxComplete(function( event, xhr, settings ) {           
+            if ( settings.url === "/ajax/getDropdownValue.php" ) {
+                loadAllowedCategories('.$selectedItilcategoriesId.');
+            }
+          });
     ';
 
     echo Html::scriptBlock($js_block);

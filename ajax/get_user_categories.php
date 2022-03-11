@@ -23,6 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['requester_user_id']))
           'text' => $categorie
         ];
     }
+    if (!empty($_POST['selectedItilcategoriesId'])) {
+        $results = [['id'=>$_POST['selectedItilcategoriesId'],'text'=>$user_categories[$_POST['selectedItilcategoriesId']]]] + $results;
+    }
     if (count($results)) {
         echo json_encode($results);
     }
