@@ -299,7 +299,7 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket)
             
             $("#"+idSelectItil).empty().select2({
                 data: allowed_categories,
-                width: "",
+                width: "auto",
             });
     
             $("#"+idSelectItil).select2("open");
