@@ -1,16 +1,17 @@
 <?php
+
 // Version of the plugin
-define('PLUGIN_GROUPCATEGORY_VERSION', "1.3.0");
+define('PLUGIN_GROUPCATEGORY_VERSION', "1.4.0RC1");
 define('PLUGIN_GROUPCATEGORY_GLPI_MIN_VERSION', '9.4');
 define('PLUGIN_GROUPCATEGORY_NAMESPACE', 'groupcategory');
 // Maximum GLPI version, exclusive
 define("PLUGIN_GROUPCATEGORY_GLPI_MAX_VERSION", "9.6");
 
 if (!defined("PLUGIN_GROUPCATEGORY_DIR")) {
-   define("PLUGIN_GROUPCATEGORY_DIR", Plugin::getPhpDir("groupcategory"));
+    define("PLUGIN_GROUPCATEGORY_DIR", Plugin::getPhpDir("groupcategory"));
 }
 if (!defined("PLUGIN_GROUPCATEGORY_WEB_DIR")) {
-   define("PLUGIN_GROUPCATEGORY_WEB_DIR", Plugin::getWebDir("groupcategory"));
+    define("PLUGIN_GROUPCATEGORY_WEB_DIR", Plugin::getWebDir("groupcategory"));
 }
 
 
@@ -19,7 +20,8 @@ if (!defined("PLUGIN_GROUPCATEGORY_WEB_DIR")) {
  *
  * @return boolean
  */
-function plugin_version_groupcategory() {
+function plugin_version_groupcategory()
+{
     return [
       'name' => 'GroupCategory',
       'version' => PLUGIN_GROUPCATEGORY_VERSION,
@@ -35,7 +37,8 @@ function plugin_version_groupcategory() {
  *
  * @return boolean
  */
-function plugin_init_groupcategory() {
+function plugin_init_groupcategory()
+{
     if (Session::getLoginUserID()) {
         global $PLUGIN_HOOKS;
 
@@ -66,7 +69,8 @@ function plugin_groupcategory_check_prerequisites()
  *
  * @return boolean
  */
-function plugin_groupcategory_check_config() {
+function plugin_groupcategory_check_config()
+{
     // nothing to do
     return true;
 }
