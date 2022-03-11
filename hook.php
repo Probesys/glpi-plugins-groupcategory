@@ -5,7 +5,8 @@
  *
  * @return boolean
  */
-function plugin_groupcategory_install() {
+function plugin_groupcategory_install()
+{
     global $DB;
 
     if (!$DB->tableExists(getTableForItemType('PluginGroupcategoryGroupcategory'))) {
@@ -32,7 +33,8 @@ function plugin_groupcategory_install() {
  *
  * @return boolean
  */
-function plugin_groupcategory_uninstall() {
+function plugin_groupcategory_uninstall()
+{
     global $DB;
 
     $tables_to_drop = [
@@ -49,10 +51,9 @@ function plugin_groupcategory_uninstall() {
  *
  * @param Group $group
  */
-function plugin_groupcategory_post_show_group(Group $group) {
-
+function plugin_groupcategory_post_show_group(Group $group)
+{
     if ($group->getId() > 0) {
-
         $categories = PluginGroupcategoryGroupcategory::getAllCategories();
         $selected_categories = PluginGroupcategoryGroupcategory::getSelectedCategoriesForGroup($group);
         $dom = '';
@@ -200,8 +201,8 @@ function plugin_groupcategory_post_show_group(Group $group) {
  *
  * @param Group $group
  */
-function plugin_groupcategory_group_update(Group $group) {
-
+function plugin_groupcategory_group_update(Group $group)
+{
     if (isset($group->input['groupcategory_allowed_categories'])) {
         $allowed_categories_ids = trim($group->input['groupcategory_allowed_categories']);
 
@@ -232,7 +233,8 @@ function plugin_groupcategory_group_update(Group $group) {
  *
  * @param Ticket $ticket
  */
-function plugin_groupcategory_post_show_ticket(Ticket $ticket) {
+function plugin_groupcategory_post_show_ticket(Ticket $ticket)
+{
     global $CFG_GLPI;
     $get_user_categories_url = PLUGIN_GROUPCATEGORY_WEB_DIR. '/ajax/get_user_categories.php';
 
@@ -242,8 +244,8 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket) {
         ';
     $user_id = $_SESSION['glpiID'];
     $js_block .= 'var requester_user_id = ' . $user_id . ';';
+    $js_block .= 'var glpi_csrf_token = \'' . Session::getNewCSRFToken() . '\';';
     if ($_SESSION["glpiactiveprofile"]["interface"] == "central") {
-
         $js_block .= '
             var requester_user_id_input = $("select[id^=dropdown__users_id_requester]");
             if (requester_user_id_input.length) {
@@ -251,14 +253,16 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket) {
             }
             ';
     }
-    //$js_block .= 'console.log(requester_user_id);';        
+
+    //$js_block .= 'console.log(requester_user_id);';
     $js_block .= '        
         if (requester_user_id) {            
             $.ajax("' . $get_user_categories_url . '", {
                 method: "POST",
                 cache: false,
                 data: {
-                    requester_user_id: requester_user_id
+                    requester_user_id: requester_user_id,
+                    _glpi_csrf_token: glpi_csrf_token 
                 },
                 complete: function(responseObj, status) {
                     if ( status == "success"  && responseObj.responseText.length) 
@@ -274,7 +278,7 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket) {
         }
 
         function displayAllowedCategories(allowed_categories) {
-            
+            console.log("groupCategroryPlugin : in displayAllowedCategories function");
             var category_container = $("#show_category_by_type");
             idSelectItil = $("select[name=itilcategories_id]").attr(\'id\');
             $("#"+idSelectItil).empty().select2({
