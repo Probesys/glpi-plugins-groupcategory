@@ -7,7 +7,7 @@
       <short>
 	    <fr><![CDATA[Permet de limiter le nombre de catégories disponibles pour les demandeurs lors de la création de tickets.]]></fr>
 	    <en><![CDATA[Customizes the list of accessible ticket categories for ticket requesters.]]></en>
-            <cs<![CDATA[Skupina kategorie je zásuvný modul umožňující omezit při vytváření požadavku uživateli počet dostupných kategorií.]]></cs>
+        <cs><![CDATA[Skupina kategorie je zásuvný modul umožňující omezit při vytváření požadavku uživateli počet dostupných kategorií.]]></cs>
       </short>
       <long>
          <fr><![CDATA[Fonctionnalités:
@@ -45,7 +45,7 @@
          <compatibility>9.4</compatibility>
       </version>
       <version>
-         <num>1.3</num>
+         <num>1.4</num>
          <compatibility>9.5</compatibility>
       </version>
    </versions>
