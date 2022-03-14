@@ -1,7 +1,7 @@
 <?php
 
 // Version of the plugin
-define('PLUGIN_GROUPCATEGORY_VERSION', "1.4.0RC1");
+define('PLUGIN_GROUPCATEGORY_VERSION', "1.4.0RC2");
 define('PLUGIN_GROUPCATEGORY_GLPI_MIN_VERSION', '9.4');
 define('PLUGIN_GROUPCATEGORY_NAMESPACE', 'groupcategory');
 // Maximum GLPI version, exclusive
