@@ -2,27 +2,28 @@
    <name>GroupCategory</name>
    <key>groupcategory</key>
    <state>stable</state>
+   <logo>https://raw.githubusercontent.com/Probesys/glpi-plugins-groupcategory/github/pics/logo.png</logo>
    <description>
       <short>
-	      <fr>Permet de limiter le nombre de catégories disponibles pour les demandeurs lors de la création de tickets.</fr>
-	      <en>Customizes the list of accessible ticket categories for ticket requesters.</en>
-          <cs>Skupina kategorie je zásuvný modul umožňující omezit při vytváření požadavku uživateli počet dostupných kategorií.</cs>
+	    <fr><![CDATA[Permet de limiter le nombre de catégories disponibles pour les demandeurs lors de la création de tickets.]]></fr>
+	    <en><![CDATA[Customizes the list of accessible ticket categories for ticket requesters.]]></en>
+            <cs<![CDATA[Skupina kategorie je zásuvný modul umožňující omezit při vytváření požadavku uživateli počet dostupných kategorií.]]></cs>
       </short>
       <long>
-         <fr>
-* configurer la liste des catégories autorisées/interdites pour chaque groupe. Par exemple, le groupe XYZ peut avoir accès à la catégorie ABC, mais pas le groupe UVW.
-* changer la liste des catégories visibles sur le formulaire de création de ticket. Par exemple, si le demandeur d'un ticket est dans le groupe XYZ, alors la catégorie ABC sera disponible. Si le demande est dans le groupe UVW, la catégorie ABC ne sera pas disponible.
-* si la liste des catégories autorisées d'un groupe est vide, alors les demandeurs de ce groupe auront accès à presque toutes les catégories (en fonction des entitées et des catégories récursives).
-         </fr>
-         <en>
-* configure list of allowed/disallowed categories for every group. Go to Administration -> Groups -> select a group -> scroll down. Example: group XYZ can have category ABC, but group UVW won't.
-* change the list of available categories on the ticket creation form. Example: If the requester of a ticket is in group XYZ, the categories will include ABC. If the requester is in group UVW, category ABC won't be available.
-* if a group's allowed categories list is empty, requesters in this group will have access to nearly all categories (depending on entities and if the categories are recursive)
-         </en>
-         <cs>
-* nastavení seznamu znepřístupněných/zpřístupněných kategorií pro každou ze skupin
-* změna zpřístupněných kategori podle nastavení a skupin žadatele při vytváření požadavku
-         </cs>
+         <fr><![CDATA[Fonctionnalités:
+        <br />- Configurer la liste des catégories autorisées/interdites pour chaque groupe : par exemple, le groupe XYZ peut avoir accès à la catégorie ABC, mais pas le groupe UVW.
+        <br />- changer la liste des catégories visibles sur le formulaire de création de ticket:  par exemple, si le demandeur d'un ticket est dans le groupe XYZ, alors la catégorie ABC sera disponible. Si le demande est dans le groupe UVW, la catégorie ABC ne sera pas disponible.
+        <br />- si la liste des catégories autorisées d'un groupe est vide, alors les demandeurs de ce groupe auront accès à presque toutes les catégories (en fonction des entitées et des catégories récursives).
+         ]]></fr>
+         <en><![CDATA[Features:
+        <br />- Configure list of allowed/disallowed categories for every group. Go to Administration -> Groups -> select a group -> scroll down : for example, group XYZ can have category ABC, but group UVW won't.
+        <br />- Change the list of available categories on the ticket creation form : for example, If the requester of a ticket is in group XYZ, the categories will include ABC. If the requester is in group UVW, category ABC won't be available.
+        <br />- If a group's allowed categories list is empty, requesters in this group will have access to nearly all categories (depending on entities and if the categories are recursive)
+         ]]></en>
+         <cs><![CDATA[<br />Funkce:
+        <br />-- Nastavení seznamu znepřístupněných/zpřístupněných kategorií pro každou ze skupin
+        <br />- změna zpřístupněných kategori podle nastavení a skupin žadatele při vytváření požadavku
+         ]]></cs>
       </long>
    </description>
    <homepage>https://github.com/Probesys/glpi-plugins-groupcategory</homepage>
@@ -42,6 +43,10 @@
       <version>
          <num>1.2</num>
          <compatibility>9.4</compatibility>
+      </version>
+      <version>
+         <num>1.3</num>
+         <compatibility>9.5</compatibility>
       </version>
    </versions>
    <langs>

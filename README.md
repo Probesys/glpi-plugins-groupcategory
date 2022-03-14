@@ -5,7 +5,7 @@ By Probesys: https://probesys.com
 
 Language: french
 
-Works with: GLPI 9.4.X ( tested with 9.4.3 )
+Works with: GLPI 9.5.X ( tested with 9.5.1 )
 
 This plugin customizes the list of accessible ticket categories for ticket requesters.
 
