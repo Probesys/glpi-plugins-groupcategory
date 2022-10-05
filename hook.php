@@ -211,7 +211,6 @@ function plugin_groupcategory_group_update(Group $group)
 
         if ($allowed_categories_ids != $selected_categories_ids) {
             $group_category = new PluginGroupcategoryGroupcategory();
-            //$exists = $group_category->getFromDBByQuery("WHERE TRUE AND group_id = " . $group->getId());
             $exists = $group_category->getFromDBByCrit(["group_id" => $group->getId()]);
             $group_update_params = [
                 'group_id' => $group->getId(),
@@ -238,10 +237,7 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket)
     global $CFG_GLPI;
     $get_user_categories_url = PLUGIN_GROUPCATEGORY_WEB_DIR. '/ajax/get_user_categories.php';
 
-    $js_block = '
-        //console.log("plugin_groupcategory_post_show_ticket");
-        var requester_user_id = 0;
-        ';
+    $js_block = 'var requester_user_id = 0;';
     $user_id = $_SESSION['glpiID'];
     $js_block .= 'var requester_user_id = ' . $user_id . ';';
     $js_block .= 'var glpi_csrf_token = \'' . Session::getNewCSRFToken() . '\';';
@@ -261,13 +257,12 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket)
         $selectedItilcategoriesId = $ticket->input['itilcategories_id'];
     }
 
-    //$js_block .= 'console.log(requester_user_id);';
     $js_block .= ' 
         if (requester_user_id) { 
             loadAllowedCategories('.$selectedItilcategoriesId.');
         }
         function loadAllowedCategories(selectedItilcategoriesId) {
-            //console.log(\'selectedItilcategoriesId1=\' + selectedItilcategoriesId);           
+           
             $.ajax("' . $get_user_categories_url . '", {
                 method: "POST",
                 cache: false,
@@ -295,16 +290,11 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket)
             var category_container = $("#show_category_by_type");
             domElementItilcategorieselement = $("select[name=itilcategories_id]");
             idSelectItil = $("select[name=itilcategories_id]").attr(\'id\');
-            //idSelectItil = oldIdSelectItil;
-            //surcharge id : 
-            //idSelectItil = oldIdSelectItil + "_override-new";
-            //domElementItilcategorieselement.attr(\'id\',idSelectItil);
             
             $("#"+idSelectItil).empty().select2({
                 data: allowed_categories,
                 width: "auto",
             });
-            //console.log(selectedItilcategoriesId);
             $("#"+idSelectItil).val(selectedItilcategoriesId) ;
             if(selectedItilcategoriesId == 0){
               $("#"+idSelectItil).select2("open");
