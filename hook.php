@@ -254,8 +254,11 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket)
             ';
     }
     $selectedItilcategoriesId = '';
-    if (isset($_POST['itilcategories_id'])) {
-        $selectedItilcategoriesId = $_POST['itilcategories_id'];
+    if (isset($ticket->fields['itilcategories_id'])) {
+        $selectedItilcategoriesId = $ticket->fields['itilcategories_id'];
+    }
+    if (isset($ticket->input['itilcategories_id'])) {
+        $selectedItilcategoriesId = $ticket->input['itilcategories_id'];
     }
 
     //$js_block .= 'console.log(requester_user_id);';
@@ -264,7 +267,7 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket)
             loadAllowedCategories('.$selectedItilcategoriesId.');
         }
         function loadAllowedCategories(selectedItilcategoriesId) {
-                       
+            //console.log(\'selectedItilcategoriesId1=\' + selectedItilcategoriesId);           
             $.ajax("' . $get_user_categories_url . '", {
                 method: "POST",
                 cache: false,
@@ -278,7 +281,7 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket)
                     {
                         try {
                             var allowed_categories = $.parseJSON(responseObj.responseText);
-                            displayAllowedCategories(allowed_categories);
+                            displayAllowedCategories(allowed_categories, selectedItilcategoriesId);
                         } catch (e) {
                         }
                     }
@@ -287,7 +290,7 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket)
             
         };
 
-        function displayAllowedCategories(allowed_categories) {
+        function displayAllowedCategories(allowed_categories, selectedItilcategoriesId) {
 
             var category_container = $("#show_category_by_type");
             domElementItilcategorieselement = $("select[name=itilcategories_id]");
@@ -301,8 +304,11 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket)
                 data: allowed_categories,
                 width: "auto",
             });
-    
-            $("#"+idSelectItil).select2("open");
+            //console.log(selectedItilcategoriesId);
+            $("#"+idSelectItil).val(selectedItilcategoriesId) ;
+            if(selectedItilcategoriesId == 0){
+              $("#"+idSelectItil).select2("open");
+            }
         };
         
         $( document ).ajaxComplete(function( event, xhr, settings ) {           
