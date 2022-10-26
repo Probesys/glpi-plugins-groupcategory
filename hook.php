@@ -9,19 +9,21 @@ function plugin_groupcategory_install()
 {
     global $DB;
 
+    $default_charset = DBConnection::getDefaultCharset();
+    $default_collation = DBConnection::getDefaultCollation();
+    $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
+
     if (!$DB->tableExists(getTableForItemType('PluginGroupcategoryGroupcategory'))) {
         $create_table_query = "
             CREATE TABLE IF NOT EXISTS `" . getTableForItemType('PluginGroupcategoryGroupcategory') . "`
             (
-                `id` INT(11) NOT NULL AUTO_INCREMENT,
-                `group_id` INT(11) NOT NULL,
+                `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
+                `group_id` INT {$default_key_sign} NOT NULL,
                 `category_ids` TEXT NOT NULL,
                 PRIMARY KEY (`id`),
                 INDEX (`group_id`)
             )
-            COLLATE='utf8_unicode_ci'
-            ENGINE=InnoDB
-        ";
+            ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
         $DB->query($create_table_query) or die($DB->error());
     }
 
