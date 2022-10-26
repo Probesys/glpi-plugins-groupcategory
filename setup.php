@@ -1,11 +1,11 @@
 <?php
 
 // Version of the plugin
-define('PLUGIN_GROUPCATEGORY_VERSION', "1.4.0RC3");
-define('PLUGIN_GROUPCATEGORY_GLPI_MIN_VERSION', '9.4');
+define('PLUGIN_GROUPCATEGORY_VERSION', "2.0.0");
+define('PLUGIN_GROUPCATEGORY_GLPI_MIN_VERSION', '10.0');
 define('PLUGIN_GROUPCATEGORY_NAMESPACE', 'groupcategory');
 // Maximum GLPI version, exclusive
-define("PLUGIN_GROUPCATEGORY_GLPI_MAX_VERSION", "9.6");
+define("PLUGIN_GROUPCATEGORY_GLPI_MAX_VERSION", "11.0");
 
 if (!defined("PLUGIN_GROUPCATEGORY_DIR")) {
     define("PLUGIN_GROUPCATEGORY_DIR", Plugin::getPhpDir("groupcategory"));
