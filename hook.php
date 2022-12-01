@@ -260,6 +260,13 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket)
         $selectedItilcategoriesId = $_POST['itilcategories_id'];
     }
 
+    $cat_id='';
+    if(isset($ticket->fields["itilcategories_id"])){
+        $cat_id=$ticket->fields["itilcategories_id"];
+    }else{
+        $cat_id=$_POST['itilcategories_id'];
+    }
+
     //$js_block .= 'console.log(requester_user_id);';
     $js_block .= ' 
         if (requester_user_id) { 
@@ -302,15 +309,18 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket)
             $("#"+idSelectItil).empty().select2({
                 data: allowed_categories,
                 width: "auto",
-            });
+            }).select2("val","'.$cat_id.'");
+
+            
     
-            $("#"+idSelectItil).select2("open");
+            //$("#"+idSelectItil).select2("open");
         };
         
         $( document ).ajaxComplete(function( event, xhr, settings ) {           
             if ( settings.url === "/ajax/getDropdownValue.php" ) {
                 loadAllowedCategories('.$selectedItilcategoriesId.');
             }
+            
           });
     ';
 
