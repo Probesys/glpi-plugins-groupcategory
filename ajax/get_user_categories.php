@@ -11,7 +11,6 @@ Html::header_nocache();
 
 Session::checkLoginUser();
 
-Toolbox::logInFile("GET_USER_CATEGORIES",print_r($_POST,true));
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['requester_user_id'])) {
     $requester_user_id = (int) trim($_POST['requester_user_id']);
     $user_categories = PluginGroupcategoryGroupcategory::getUserCategories($requester_user_id);
@@ -30,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['requester_user_id']))
         echo json_encode($results);
     }
 }
-Toolbox::logInFile("GET_USER_CATEGORIES",print_r($results,true));
+
 if (isset($old_GLPI_USE_CSRF_CHECK)) {
     define("GLPI_USE_CSRF_CHECK", $old_GLPI_USE_CSRF_CHECK);
 }
