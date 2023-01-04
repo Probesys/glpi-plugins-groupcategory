@@ -104,11 +104,11 @@ function plugin_groupcategory_post_show_group(Group $group)
         $dom .= '</table>' . "\n";
         $dom .= '</div>' . "\n";
 
-        echo $dom;
+        echo $dom;   
 
         $js_block = '
             var _groupcategory_content = $("#groupcategory_content");
-            $(_groupcategory_content.html()).detach().insertAfter("table#mainformtable");
+            $(_groupcategory_content.html()).detach().insertAfter("div#mainformtable table.tab_cadre_fixe");
             _groupcategory_content.remove();
 
             var _groupcategory_selected_categories = {
@@ -211,7 +211,6 @@ function plugin_groupcategory_group_update(Group $group)
 
         if ($allowed_categories_ids != $selected_categories_ids) {
             $group_category = new PluginGroupcategoryGroupcategory();
-            //$exists = $group_category->getFromDBByQuery("WHERE TRUE AND group_id = " . $group->getId());
             $exists = $group_category->getFromDBByCrit(["group_id" => $group->getId()]);
             $group_update_params = [
                 'group_id' => $group->getId(),
@@ -238,10 +237,7 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket)
     global $CFG_GLPI;
     $get_user_categories_url = PLUGIN_GROUPCATEGORY_WEB_DIR. '/ajax/get_user_categories.php';
 
-    $js_block = '
-        //console.log("plugin_groupcategory_post_show_ticket");
-        var requester_user_id = 0;
-        ';
+    $js_block = 'var requester_user_id = 0;';
     $user_id = $_SESSION['glpiID'];
     $js_block .= 'var requester_user_id = ' . $user_id . ';';
     $js_block .= 'var glpi_csrf_token = \'' . Session::getNewCSRFToken() . '\';';
@@ -254,17 +250,19 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket)
             ';
     }
     $selectedItilcategoriesId = '';
-    if (isset($_POST['itilcategories_id'])) {
-        $selectedItilcategoriesId = $_POST['itilcategories_id'];
+    if (isset($ticket->fields['itilcategories_id'])) {
+        $selectedItilcategoriesId = $ticket->fields['itilcategories_id'];
+    }
+    if (isset($ticket->input['itilcategories_id'])) {
+        $selectedItilcategoriesId = $ticket->input['itilcategories_id'];
     }
 
-    //$js_block .= 'console.log(requester_user_id);';
     $js_block .= ' 
         if (requester_user_id) { 
             loadAllowedCategories('.$selectedItilcategoriesId.');
         }
         function loadAllowedCategories(selectedItilcategoriesId) {
-                       
+           
             $.ajax("' . $get_user_categories_url . '", {
                 method: "POST",
                 cache: false,
@@ -278,7 +276,7 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket)
                     {
                         try {
                             var allowed_categories = $.parseJSON(responseObj.responseText);
-                            displayAllowedCategories(allowed_categories);
+                            displayAllowedCategories(allowed_categories, selectedItilcategoriesId);
                         } catch (e) {
                         }
                     }
@@ -287,22 +285,20 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket)
             
         };
 
-        function displayAllowedCategories(allowed_categories) {
+        function displayAllowedCategories(allowed_categories, selectedItilcategoriesId) {
 
             var category_container = $("#show_category_by_type");
             domElementItilcategorieselement = $("select[name=itilcategories_id]");
             idSelectItil = $("select[name=itilcategories_id]").attr(\'id\');
-            //idSelectItil = oldIdSelectItil;
-            //surcharge id : 
-            //idSelectItil = oldIdSelectItil + "_override-new";
-            //domElementItilcategorieselement.attr(\'id\',idSelectItil);
             
             $("#"+idSelectItil).empty().select2({
                 data: allowed_categories,
                 width: "auto",
             });
-    
-            $("#"+idSelectItil).select2("open");
+            $("#"+idSelectItil).val(selectedItilcategoriesId) ;
+            if(selectedItilcategoriesId == 0){
+              $("#"+idSelectItil).select2("open");
+            }
         };
         
         $( document ).ajaxComplete(function( event, xhr, settings ) {           
