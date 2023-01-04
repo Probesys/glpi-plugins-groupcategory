@@ -48,6 +48,10 @@
          <num>1.4</num>
          <compatibility>9.5</compatibility>
       </version>
+      <version>
+         <num>1.5</num>
+         <compatibility>10.0.2</compatibility>
+      </version>      
    </versions>
    <langs>
       <lang>en_GB</lang>
