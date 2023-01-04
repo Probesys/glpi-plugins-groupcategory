@@ -104,11 +104,11 @@ function plugin_groupcategory_post_show_group(Group $group)
         $dom .= '</table>' . "\n";
         $dom .= '</div>' . "\n";
 
-        echo $dom;
+        echo $dom;   
 
         $js_block = '
             var _groupcategory_content = $("#groupcategory_content");
-            $(_groupcategory_content.html()).detach().insertAfter("table#mainformtable");
+            $(_groupcategory_content.html()).detach().insertAfter("div#mainformtable table.tab_cadre_fixe");
             _groupcategory_content.remove();
 
             var _groupcategory_selected_categories = {
