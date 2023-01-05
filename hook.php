@@ -9,21 +9,19 @@ function plugin_groupcategory_install()
 {
     global $DB;
 
-    $default_charset = DBConnection::getDefaultCharset();
-    $default_collation = DBConnection::getDefaultCollation();
-    $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
-
     if (!$DB->tableExists(getTableForItemType('PluginGroupcategoryGroupcategory'))) {
         $create_table_query = "
             CREATE TABLE IF NOT EXISTS `" . getTableForItemType('PluginGroupcategoryGroupcategory') . "`
             (
-                `id` INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
-                `group_id` INT {$default_key_sign} NOT NULL,
+                `id` INT(11) NOT NULL AUTO_INCREMENT,
+                `group_id` INT(11) NOT NULL,
                 `category_ids` TEXT NOT NULL,
                 PRIMARY KEY (`id`),
                 INDEX (`group_id`)
             )
-            ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
+            COLLATE='utf8_unicode_ci'
+            ENGINE=InnoDB
+        ";
         $DB->query($create_table_query) or die($DB->error());
     }
 
@@ -106,7 +104,7 @@ function plugin_groupcategory_post_show_group(Group $group)
         $dom .= '</table>' . "\n";
         $dom .= '</div>' . "\n";
 
-        echo $dom;
+        echo $dom;   
 
         $js_block = '
             var _groupcategory_content = $("#groupcategory_content");
@@ -239,23 +237,9 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket)
     global $CFG_GLPI;
     $get_user_categories_url = PLUGIN_GROUPCATEGORY_WEB_DIR. '/ajax/get_user_categories.php';
 
-    $js_block = '
-        var requester_user_id = 0;
-        ';
+    $js_block = 'var requester_user_id = 0;';
     $user_id = $_SESSION['glpiID'];
-    $select_ids = $_SESSION['select_ids'];
-	$select_ids_isnull = false;
-
-	if ($select_ids == null || $select_ids == 2)
-	{
-		$_SESSION['select_ids'] = 1;
-	}
-	else
-	{
-		$_SESSION['select_ids'] = 2;
-	}
     $js_block .= 'var requester_user_id = ' . $user_id . ';';
-    $js_block .= 'var requester_select_ids = ' . $select_ids . ';';
     $js_block .= 'var glpi_csrf_token = \'' . Session::getNewCSRFToken() . '\';';
     if ($_SESSION["glpiactiveprofile"]["interface"] == "central") {
         $js_block .= '
@@ -266,24 +250,19 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket)
             ';
     }
     $selectedItilcategoriesId = '';
-    if (isset($_POST['itilcategories_id'])) {
-        $selectedItilcategoriesId = $_POST['itilcategories_id'];
+    if (isset($ticket->fields['itilcategories_id'])) {
+        $selectedItilcategoriesId = $ticket->fields['itilcategories_id'];
     }
-
-    $cat_id='';
-    if(isset($ticket->fields["itilcategories_id"])){
-        $cat_id=$ticket->fields["itilcategories_id"];
-    }else{
-        $cat_id=$_POST['itilcategories_id'];
+    if (isset($ticket->input['itilcategories_id'])) {
+        $selectedItilcategoriesId = $ticket->input['itilcategories_id'];
     }
 
     $js_block .= ' 
-        selectUtil = $("select[name=itilcategories_id]");
-        if (requester_user_id) {  
+        if (requester_user_id) { 
             loadAllowedCategories('.$selectedItilcategoriesId.');
         }
         function loadAllowedCategories(selectedItilcategoriesId) {
-                       
+           
             $.ajax("' . $get_user_categories_url . '", {
                 method: "POST",
                 cache: false,
@@ -297,7 +276,7 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket)
                     {
                         try {
                             var allowed_categories = $.parseJSON(responseObj.responseText);
-                            displayAllowedCategories(allowed_categories, requester_select_ids);
+                            displayAllowedCategories(allowed_categories, selectedItilcategoriesId);
                         } catch (e) {
                         }
                     }
@@ -305,64 +284,27 @@ function plugin_groupcategory_post_show_ticket(Ticket $ticket)
             });
             
         };
-        selectUtil.on("change", function(e) {
-			sessionStorage.setItem("categorySelectedIndex", selectUtil[0].selectedIndex);
-        });
-		
-        function displayAllowedCategories(allowed_categories, requester_select_ids) {
+
+        function displayAllowedCategories(allowed_categories, selectedItilcategoriesId) {
+
             var category_container = $("#show_category_by_type");
             domElementItilcategorieselement = $("select[name=itilcategories_id]");
             idSelectItil = $("select[name=itilcategories_id]").attr(\'id\');
-            //idSelectItil = oldIdSelectItil;
-            //surcharge id : 
-            //idSelectItil = oldIdSelectItil + "_override-new";
-            //domElementItilcategorieselement.attr(\'id\',idSelectItil);
             
-            idSelectItil = selectUtil.attr(\'id\');
-			
-			console.log(selectUtil);
-			var selectedIndexValue = sessionStorage.getItem("categorySelectedIndex");
-			if (selectedIndexValue == undefined)
-			{
-			    selectedIndexValue = 0;
-			}
-			$("#"+idSelectItil).val(selectedIndexValue).select2({
-				data: allowed_categories,                
-			});
-			
-			selectedIndexValue = sessionStorage.getItem("categorySelectedIndex");
-			if (selectedIndexValue == undefined)
-			{
-				selectedIndexValue = 0;
-			}
-			
-			console.log("SELECTEDINDEXVALUE: " + selectedIndexValue);
-			console.log("SELECTEDINDEX: " + selectUtil[0].selectedIndex);
-				selectUtil[0].selectedIndex = selectedIndexValue;
-				var index_option;
-				for (index_option in selectUtil[0].options) 
-				{
-					if (index_option == "0")
-					{
-						selectUtil[0].options[index_option].selected = true;	
-					}
-					else
-					{
-						selectUtil[0].options[index_option].selected = false;
-					}
-				}
-				console.log(selectUtil);
-				selectUtil.attr(\'title\', allowed_categories[selectedIndexValue].text);
-            
-    
-            //$("#"+idSelectItil).select2("open");
+            $("#"+idSelectItil).empty().select2({
+                data: allowed_categories,
+                width: "auto",
+            });
+            $("#"+idSelectItil).val(selectedItilcategoriesId) ;
+            if(selectedItilcategoriesId == 0){
+              $("#"+idSelectItil).select2("open");
+            }
         };
         
         $( document ).ajaxComplete(function( event, xhr, settings ) {           
             if ( settings.url === "/ajax/getDropdownValue.php" ) {
                 loadAllowedCategories('.$selectedItilcategoriesId.');
             }
-            
           });
     ';
 
