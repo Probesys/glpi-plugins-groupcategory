@@ -39,13 +39,13 @@
       <version>
          <num>1.4.0</num>
          <compatibility>~9.5</compatibility>
-	 <download_url>https://github.com/Probesys/glpi-plugins-groupcategory/releases/download/v1.4.0/groupcategory-1.4.0.tbz</download_url>
+         <download_url>https://github.com/Probesys/glpi-plugins-groupcategory/releases/download/v1.4.0/groupcategory-1.4.0.tbz</download_url>
       </version>
       <version>
          <num>1.5.0</num>
          <compatibility>~10.0</compatibility>
-	 <download_url>https://github.com/Probesys/glpi-plugins-groupcategory/releases/download/v1.5.0/groupcategory.tbz</download_url>
-      </version>      
+         <download_url>https://github.com/Probesys/glpi-plugins-groupcategory/releases/download/v1.5.0/groupcategory.tbz</download_url>
+      </version>
    </versions>
    <langs>
       <lang>en_GB</lang>
