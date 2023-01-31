@@ -51,6 +51,7 @@
       <version>
          <num>1.5</num>
          <compatibility>10.0.2</compatibility>
+	 <download_url>https://github.com/Probesys/glpi-plugins-groupcategory/releases/download/v1.5.0/groupcategory.tbz</download_url>
       </version>      
    </versions>
    <langs>
