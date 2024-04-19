@@ -68,16 +68,13 @@ function plugin_version_groupcategory()
  */
 function plugin_init_groupcategory()
 {
-    if (Session::getLoginUserID()) {
-        global $PLUGIN_HOOKS;
-
-        $PLUGIN_HOOKS['csrf_compliant'][PLUGIN_GROUPCATEGORY_NAMESPACE] = true;
-        //$PLUGIN_HOOKS['post_show_item'][PLUGIN_GROUPCATEGORY_NAMESPACE] = ['PluginGroupcategoryGroupcategory', 'post_show_item'];
-        $PLUGIN_HOOKS['post_item_form'][PLUGIN_GROUPCATEGORY_NAMESPACE] = ['PluginGroupcategoryGroupcategory', 'post_item_form'];
-        $PLUGIN_HOOKS['pre_item_update'][PLUGIN_GROUPCATEGORY_NAMESPACE] = [
-          'Group' => 'plugin_groupcategory_group_update',
-        ];
-    }
+    global $PLUGIN_HOOKS;
+    $PLUGIN_HOOKS['csrf_compliant'][PLUGIN_GROUPCATEGORY_NAMESPACE] = true;
+    //$PLUGIN_HOOKS['post_show_item'][PLUGIN_GROUPCATEGORY_NAMESPACE] = ['PluginGroupcategoryGroupcategory', 'post_show_item'];
+    $PLUGIN_HOOKS['post_item_form'][PLUGIN_GROUPCATEGORY_NAMESPACE] = ['PluginGroupcategoryGroupcategory', 'post_item_form'];
+    $PLUGIN_HOOKS['pre_item_update'][PLUGIN_GROUPCATEGORY_NAMESPACE] = [
+      'Group' => 'plugin_groupcategory_group_update',
+    ];
 }
 
 /**
