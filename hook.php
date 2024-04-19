@@ -47,7 +47,7 @@ function plugin_groupcategory_install()
                 PRIMARY KEY (`id`),
                 INDEX (`group_id`)
             )
-            COLLATE='utf8_unicode_ci'
+            COLLATE='utf8mb4_unicode_ci'
             ENGINE=InnoDB
         ";
         $DB->query($create_table_query) or die($DB->error());
