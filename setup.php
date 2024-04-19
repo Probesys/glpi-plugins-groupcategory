@@ -30,7 +30,7 @@
 
 // Version of the plugin
 
-define('PLUGIN_GROUPCATEGORY_VERSION', '1.5.1');
+define('PLUGIN_GROUPCATEGORY_VERSION', '1.5.2');
 define('PLUGIN_GROUPCATEGORY_GLPI_MIN_VERSION', '9.4');
 define('PLUGIN_GROUPCATEGORY_NAMESPACE', 'groupcategory');
 // Maximum GLPI version, exclusive
